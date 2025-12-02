@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,14 @@ public class Reservation {
         EXPIRED("만료경과");
 
         private final String description;
+    }
+
+    @Builder
+    public Reservation(Long id, Long userId, Long seatId, LocalDateTime createdAt, Status status) {
+        this.id = id;
+        this.userId = userId;
+        this.seatId = seatId;
+        this.createdAt = createdAt;
+        this.status = status;
     }
 }

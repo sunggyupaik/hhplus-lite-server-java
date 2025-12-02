@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.infrastructure.concert;
 
+import jakarta.persistence.EntityNotFoundException;
 import kr.hhplus.be.server.domain.concert.Seat;
 import kr.hhplus.be.server.domain.concert.SeatRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +16,11 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     public List<Seat> findAllByScheduleConcertDates(Integer scheduleDate) {
         return seatJpaRepository.findAllByScheduleConcertDates(scheduleDate);
+    }
+
+    @Override
+    public Seat findById(Long seatId) {
+        return seatJpaRepository.findById(seatId)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

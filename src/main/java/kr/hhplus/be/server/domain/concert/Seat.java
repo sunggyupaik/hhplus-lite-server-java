@@ -56,4 +56,8 @@ public class Seat {
         this.status = status;
         this.schedule = schedule;
     }
+
+    public void changeToHeld() {
+        this.status = Status.HELD;
+    }
 }

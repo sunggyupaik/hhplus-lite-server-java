@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -31,4 +32,11 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @ToString.Exclude
     private List<PointHistory> pointHistoryList = new ArrayList<>();
+
+    @Builder
+    public User(Long id, String email, Long balance) {
+        this.id = id;
+        this.email = email;
+        this.balance = balance;
+    }
 }
