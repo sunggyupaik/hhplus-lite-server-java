@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.user;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,10 +23,12 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     private String email;
     private Long balance;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @ToString.Exclude
     private List<PointHistory> pointHistoryList = new ArrayList<>();
 }
