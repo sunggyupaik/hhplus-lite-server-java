@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.user;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,9 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
@@ -23,6 +24,7 @@ import lombok.ToString;
 public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "point_history_id")
     private Long id;
     private Long amount;
 
@@ -30,7 +32,7 @@ public class PointHistory {
     private Type type;
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     public enum Type {
         CHARGE("충전"),
         USE("사용");

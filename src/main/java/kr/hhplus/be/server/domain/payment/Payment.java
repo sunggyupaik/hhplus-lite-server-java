@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.payment;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -7,9 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
     private Long id;
     private Long reservationId;
     private Long amount;
@@ -32,7 +34,7 @@ public class Payment {
     private Status status;
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     public enum Status {
         WAITING("결제대기"),
         PAID("결제완료");
