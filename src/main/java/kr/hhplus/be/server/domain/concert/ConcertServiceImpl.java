@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ConcertServiceImpl implements ConcertService {
     private final ScheduleRepository scheduleRepository;
+    private final SeatRepository seatRepository;
 
     @Override
     public List<ScheduleInfo.ConcertDate> schedulesFromToday() {
@@ -22,6 +23,14 @@ public class ConcertServiceImpl implements ConcertService {
                     Integer concertDate = schedule.getConcertDate();
                     return new ScheduleInfo.ConcertDate(concertDate);
                 })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SeatInfo.Main> seatsFrom(String scheduleDate) {
+        List<Seat> seats = seatRepository.findAllByScheduleConcertDates(Integer.parseInt(scheduleDate));
+        return seats.stream()
+                .map(SeatInfo.Main::of)
                 .collect(Collectors.toList());
     }
 }

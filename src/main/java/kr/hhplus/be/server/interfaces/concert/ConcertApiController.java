@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.stream.Collectors;
@@ -21,6 +22,17 @@ public class ConcertApiController {
         var concertSchedules = concertService.schedulesFromToday();
         var response = concertSchedules.stream()
                 .map(ScheduleDto.SchedulesConcertDate::of)
+                .collect(Collectors.toList());
+
+        return CommonResponse.success(response);
+    }
+
+    @GetMapping("/seats")
+    public CommonResponse seats(@RequestHeader("X-Waiting-Token") String waitingToken,
+                                @RequestParam(name = "schedule-date") String scheduleDate) {
+        var concertSchedules = concertService.seatsFrom(scheduleDate);
+        var response = concertSchedules.stream()
+                .map(SeatDto.Main::of)
                 .collect(Collectors.toList());
 
         return CommonResponse.success(response);
