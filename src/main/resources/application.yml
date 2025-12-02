@@ -30,3 +30,14 @@ spring:
     url: jdbc:mysql://localhost:3306/concert?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 1234
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true  # 콘솔 컬러 출력 (가능한 환경일 때만)
+  logging:
+    level:
+      org.hibernate.SQL: debug
+      org.hibernate.orm.jdbc.bind: trace   # 파라미터까지 표시

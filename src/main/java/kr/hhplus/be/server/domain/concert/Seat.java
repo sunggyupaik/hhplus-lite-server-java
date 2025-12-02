@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class Seat {
     private Long id;
     private Long concertId;
     private String seatNumber;
+    private Long price;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -44,4 +46,14 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
+    @Builder
+    public Seat(Long id, Long concertId, String seatNumber, Long price, Status status, Schedule schedule) {
+        this.id = id;
+        this.concertId = concertId;
+        this.seatNumber = seatNumber;
+        this.price = price;
+        this.status = status;
+        this.schedule = schedule;
+    }
 }

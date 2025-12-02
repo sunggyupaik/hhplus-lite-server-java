@@ -10,4 +10,7 @@ import java.util.List;
 public interface ScheduleJpaRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT c FROM Schedule c WHERE c.concertDate >= :today")
     List<Schedule> getScheduleDatesFromToday(@Param("today") int today);
+
+    @Query("SELECT c FROM Schedule c WHERE c.concertDate = :date")
+    List<Schedule> getScheduleDatesFromDate(@Param("date") int date);
 }

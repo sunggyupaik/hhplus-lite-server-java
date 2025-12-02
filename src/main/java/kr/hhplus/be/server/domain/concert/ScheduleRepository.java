@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface ScheduleRepository {
     List<Schedule> getScheduleDatesFromToday(int today);
+
+    List<Schedule> getScheduleDatesFromDate(int date);
 }

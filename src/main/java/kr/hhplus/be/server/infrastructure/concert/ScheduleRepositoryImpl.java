@@ -16,4 +16,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     public List<Schedule> getScheduleDatesFromToday(int today) {
         return scheduleJpaRepository.getScheduleDatesFromToday(today);
     }
+
+    @Override
+    public List<Schedule> getScheduleDatesFromDate(int date) {
+        return scheduleJpaRepository.getScheduleDatesFromDate(date);
+    }
 }
