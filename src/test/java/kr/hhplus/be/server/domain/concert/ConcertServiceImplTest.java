@@ -2,7 +2,6 @@ package kr.hhplus.be.server.domain.concert;
 
 import kr.hhplus.be.server.infrastructure.concert.ConcertJpaRepository;
 import kr.hhplus.be.server.infrastructure.concert.ScheduleJpaRepository;
-import kr.hhplus.be.server.infrastructure.concert.ScheduleRepositoryImpl;
 import kr.hhplus.be.server.infrastructure.concert.SeatJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ConcertServiceImplTest {
-    @Autowired private ConcertServiceImpl concertService;
-    @Autowired private ScheduleRepositoryImpl scheduleRepositoryImpl;
+    @Autowired private ConcertService concertService;
     @Autowired private ScheduleJpaRepository scheduleJpaRepository;
     @Autowired private ConcertJpaRepository concertJpaRepository;
     @Autowired private SeatJpaRepository seatJpaRepository;
@@ -84,7 +82,7 @@ class ConcertServiceImplTest {
             @DisplayName("날짜에 해당하는 콘서트 좌석 목록을 리턴한다")
             void it_returns_seats_from_concert_date() {
                 assertThat(seats.size()).isEqualTo(50);
-                var seats = concertService.seatsFrom(Integer.toString(localDateToInteger(LocalDateTime.now())));
+                var seats = concertService.seatsFrom(localDateToString(LocalDateTime.now()));
                 for (var seat : seats) {
                     assertThat(seat.status()).isEqualTo(Seat.Status.AVAILABLE);
                 }
@@ -137,5 +135,9 @@ class ConcertServiceImplTest {
         return localDateTime.getYear() * 10000
                 + localDateTime.getMonthValue() * 100
                 + localDateTime.getDayOfMonth();
+    }
+
+    private String localDateToString(LocalDateTime localDateTime) {
+        return Integer.toString(this.localDateToInteger(localDateTime));
     }
 }
