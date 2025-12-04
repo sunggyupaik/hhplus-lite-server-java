@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -43,4 +44,28 @@ public class PointHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Builder
+    public PointHistory(Long id, Long amount, Type type, User user) {
+        this.id = id;
+        this.amount = amount;
+        this.type = type;
+        this.user = user;
+    }
+
+    public static PointHistory snapShotOfCharge(User user, Long amount) {
+        return PointHistory.builder()
+                .amount(amount)
+                .type(Type.CHARGE)
+                .user(user)
+                .build();
+    }
+
+    public static PointHistory snapShotOfUse(User user, Long amount) {
+        return PointHistory.builder()
+                .amount(amount)
+                .type(Type.USE)
+                .user(user)
+                .build();
+    }
 }
