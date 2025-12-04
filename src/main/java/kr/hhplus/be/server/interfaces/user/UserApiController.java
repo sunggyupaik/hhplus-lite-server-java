@@ -28,7 +28,7 @@ public class UserApiController {
         return CommonResponse.success(response);
     }
 
-    @PostMapping("/{userId}/points")
+    @PostMapping("/{userId}/charge")
     public CommonResponse chargePoint(@RequestHeader("X-Waiting-Token") String waitingToken,
                                       @PathVariable("userId") Long userId,
                                       @RequestBody @Valid UserDto.chargePointRequest request) {
@@ -39,8 +39,26 @@ public class UserApiController {
         return CommonResponse.success(response);
     }
 
+    @PostMapping("/{userId}/use")
+    public CommonResponse usePoint(@RequestHeader("X-Waiting-Token") String waitingToken,
+                                      @PathVariable("userId") Long userId,
+                                      @RequestBody @Valid UserDto.usePointRequest request) {
+        UserCommand.usePoint command = this.usePointOf(userId, request);
+        var balance = userService.usePoint(command);
+        var response = UserDto.useResponse.of(balance);
+
+        return CommonResponse.success(response);
+    }
+
     private UserCommand.chargePoint chargePointOf(Long userId, UserDto.chargePointRequest request) {
         return UserCommand.chargePoint.builder()
+                .userId(userId)
+                .amount(request.amount())
+                .build();
+    }
+
+    private UserCommand.usePoint usePointOf(Long userId, UserDto.usePointRequest request) {
+        return UserCommand.usePoint.builder()
                 .userId(userId)
                 .amount(request.amount())
                 .build();

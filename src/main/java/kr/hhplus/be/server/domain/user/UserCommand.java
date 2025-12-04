@@ -10,4 +10,12 @@ public class UserCommand {
     ) {
 
     }
+
+    @Builder
+    public record usePoint(
+            Long userId,
+            Long amount
+    ) {
+
+    }
 }

@@ -19,4 +19,10 @@ public class UserServiceImpl implements UserService {
         User findUser = userRepository.findById(command.userId());
         return findUser.chargePoint(command.amount());
     }
+
+    @Override
+    public Long usePoint(UserCommand.usePoint command) {
+        User findUser = userRepository.findById(command.userId());
+        return findUser.usePoint(command.amount());
+    }
 }

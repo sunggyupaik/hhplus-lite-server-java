@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kr.hhplus.be.server.support.exception.InvalidParamException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,15 @@ public class User {
 
     public Long chargePoint(Long amount) {
         this.balance += amount;
+        return this.balance;
+    }
+
+    public Long usePoint(Long amount) {
+        if (this.balance - amount < 0) {
+            throw new InvalidParamException("사용 가능한 포인트가 부족합니다");
+        }
+
+        this.balance -= amount;
         return this.balance;
     }
 }
