@@ -39,4 +39,9 @@ public class User {
         this.email = email;
         this.balance = balance;
     }
+
+    public Long chargePoint(Long amount) {
+        this.balance += amount;
+        return this.balance;
+    }
 }
