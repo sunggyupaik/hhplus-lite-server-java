@@ -12,6 +12,13 @@ public class UserDto {
 
     }
 
+    public record usePointRequest(
+            @NotNull(message = "amount는 필수입니다.")
+            Long amount
+    ) {
+
+    }
+
     @Builder
     public record PointMain(
             Long userId,
@@ -31,6 +38,17 @@ public class UserDto {
     ) {
         public static chargeResponse of(Long balance) {
             return chargeResponse.builder()
+                    .balance(balance)
+                    .build();
+        }
+    }
+
+    @Builder
+    public record useResponse(
+            Long balance
+    ) {
+        public static useResponse of(Long balance) {
+            return useResponse.builder()
                     .balance(balance)
                     .build();
         }

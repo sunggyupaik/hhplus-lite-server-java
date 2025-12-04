@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.user;
 
 import kr.hhplus.be.server.infrastructure.user.UserJpaRepository;
 import kr.hhplus.be.server.support.exception.EntityNotFoundException;
+import kr.hhplus.be.server.support.exception.InvalidParamException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -91,6 +92,80 @@ class UserServiceImplTest {
                         () -> userService.chargePoint(command)
                 )
                         .isInstanceOf(EntityNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("usePoint 메서드는")
+    class Describe_of_usePoint {
+        private static final Long USER_BALANCE_2000L = 2000L;
+        private static final Long USE_POINT_1000L = 1000L;
+        UserCommand.usePoint command;
+        User user_2000;
+        @BeforeEach
+        void prepare() {
+            user_2000 = createUser(USER_BALANCE_2000L);
+            command = UserCommand.usePoint.builder()
+                    .userId(user_2000.getId())
+                    .amount(USE_POINT_1000L)
+                    .build();
+        }
+
+        @Nested
+        @DisplayName("사용자 식별자와 사용 할 금액이 주어진다면")
+        class Context_with_user_id_and_amount {
+            @Test
+            @DisplayName("식별자에 해당하는 사용자의 포인트를 차감하고 결과를 리턴한다")
+            void it_uses_point_returns_balance() {
+                Long result = userService.usePoint(command);
+                assertThat(result).isEqualTo(USER_BALANCE_2000L - USE_POINT_1000L);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 사용자 식별자가 주어진다면")
+        class Context_with_not_existed_user_id {
+            private static final Long NOT_EXISTED_USER_ID = 999L;
+            UserCommand.usePoint command;
+            @BeforeEach
+            void prepare() {
+                command = UserCommand.usePoint.builder()
+                        .userId(NOT_EXISTED_USER_ID)
+                        .amount(USE_POINT_1000L)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("존재하지 않는 사용자라는 예외를 던진다")
+            void it_throws_EntityNotFoundException() {
+                assertThatThrownBy(
+                        () -> userService.usePoint(command)
+                )
+                        .isInstanceOf(EntityNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("사용 후 금액이 0원보다 작으면")
+        class Context_with_amount_more_than_balance {
+            private static final Long USE_POINT_3000L = 3000L;
+            UserCommand.usePoint command;
+            @BeforeEach
+            void prepare() {
+                command = UserCommand.usePoint.builder()
+                        .userId(user_2000.getId())
+                        .amount(USE_POINT_3000L)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("잘못된 요청이라는 예외를 던진다")
+            void it_throws_InvalidParamException() {
+                assertThatThrownBy(
+                        () -> userService.usePoint(command)
+                )
+                        .isInstanceOf(InvalidParamException.class);
             }
         }
     }
