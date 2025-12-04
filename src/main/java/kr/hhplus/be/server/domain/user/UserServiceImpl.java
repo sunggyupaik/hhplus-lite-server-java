@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PointHistoryRepository pointHistoryRepository;
 
     @Override
     public UserInfo.PointMain getPoint(Long userId) {
@@ -17,12 +18,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long chargePoint(UserCommand.chargePoint command) {
         User findUser = userRepository.findById(command.userId());
-        return findUser.chargePoint(command.amount());
+        Long balance = findUser.chargePoint(command.amount());
+        PointHistory pointHistory = PointHistory.snapShotOfCharge(findUser, command.amount());
+        pointHistoryRepository.save(pointHistory);
+        return balance;
     }
 
     @Override
     public Long usePoint(UserCommand.usePoint command) {
         User findUser = userRepository.findById(command.userId());
-        return findUser.usePoint(command.amount());
+        Long balance = findUser.usePoint(command.amount());
+        PointHistory pointHistory = PointHistory.snapShotOfUse(findUser, command.amount());
+        pointHistoryRepository.save(pointHistory);
+        return balance;
     }
 }
