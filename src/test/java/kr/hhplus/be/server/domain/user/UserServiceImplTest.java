@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.user;
 
+import kr.hhplus.be.server.infrastructure.user.PointHistoryJpaRepository;
 import kr.hhplus.be.server.infrastructure.user.UserJpaRepository;
 import kr.hhplus.be.server.support.exception.EntityNotFoundException;
 import kr.hhplus.be.server.support.exception.InvalidParamException;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -17,10 +20,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserServiceImplTest {
     @Autowired private UserService userService;
     @Autowired private UserJpaRepository userJpaRepository;
+    @Autowired private PointHistoryJpaRepository pointHistoryJpaRepository;
 
     @BeforeEach
     void setUp() {
         userJpaRepository.deleteAll();
+        pointHistoryJpaRepository.deleteAll();
     }
 
     @Nested
@@ -69,6 +74,10 @@ class UserServiceImplTest {
             void it_charges_point_returns_balance() {
                 Long result = userService.chargePoint(command);
                 assertThat(result).isEqualTo(USER_BALANCE_1000L + CHARGE_POINT_1000L);
+
+                List<PointHistory> pointHistory = pointHistoryJpaRepository.findAll();
+                assertThat(pointHistory.get(0).getAmount()).isEqualTo(CHARGE_POINT_1000L);
+                assertThat(pointHistory.get(0).getType()).isEqualTo(PointHistory.Type.CHARGE);
             }
         }
 
@@ -120,6 +129,10 @@ class UserServiceImplTest {
             void it_uses_point_returns_balance() {
                 Long result = userService.usePoint(command);
                 assertThat(result).isEqualTo(USER_BALANCE_2000L - USE_POINT_1000L);
+
+                List<PointHistory> pointHistory = pointHistoryJpaRepository.findAll();
+                assertThat(pointHistory.get(0).getAmount()).isEqualTo(USE_POINT_1000L);
+                assertThat(pointHistory.get(0).getType()).isEqualTo(PointHistory.Type.USE);
             }
         }
 
