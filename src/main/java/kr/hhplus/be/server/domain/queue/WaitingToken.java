@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.reservation;
+package kr.hhplus.be.server.domain.queue;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,16 @@ public class WaitingToken {
         EXPIRED("만료경과");
 
         private final String description;
+    }
+
+    @Builder
+    public WaitingToken(Long id, Long userId, String waitingToken, LocalDateTime createdAt,
+                        LocalDateTime expiredAt, Status status) {
+        this.id = id;
+        this.userId = userId;
+        this.waitingToken = waitingToken;
+        this.createdAt = createdAt;
+        this.expiredAt = expiredAt;
+        this.status = status;
     }
 }
