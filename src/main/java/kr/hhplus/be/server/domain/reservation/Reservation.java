@@ -51,4 +51,8 @@ public class Reservation {
         this.createdAt = createdAt;
         this.status = status;
     }
+
+    public void changeStatusToConfirmed() {
+        this.status = Status.CONFIRMED;
+    }
 }

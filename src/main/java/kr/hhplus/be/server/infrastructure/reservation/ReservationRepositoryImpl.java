@@ -2,6 +2,7 @@ package kr.hhplus.be.server.infrastructure.reservation;
 
 import kr.hhplus.be.server.domain.reservation.Reservation;
 import kr.hhplus.be.server.domain.reservation.ReservationRepository;
+import kr.hhplus.be.server.support.exception.EntityNotFoundException;
 import kr.hhplus.be.server.support.exception.InvalidParamException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,12 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public Reservation save(Reservation reservation) {
         validCheck(reservation);
         return reservationJpaRepository.save(reservation);
+    }
+
+    @Override
+    public Reservation findById(Long id) {
+        return reservationJpaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("id = " + id));
     }
 
     private void validCheck(Reservation reservation) {
