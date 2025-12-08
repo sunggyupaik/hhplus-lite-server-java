@@ -20,4 +20,22 @@ public class ReservationCommand {
                     .build();
         }
     }
+
+    @Builder
+    public record PayReservation (
+            Long reservationId,
+            Long amount,
+            String idempotencyKey
+    ) {
+
+        public Payment toEntity(LocalDateTime createdAt) {
+            return Payment.builder()
+                    .reservationId(reservationId)
+                    .amount(amount)
+                    .idempotencyKey(idempotencyKey)
+                    .createdAt(createdAt)
+                    .status(Payment.Status.PAID)
+                    .build();
+        }
+    }
 }

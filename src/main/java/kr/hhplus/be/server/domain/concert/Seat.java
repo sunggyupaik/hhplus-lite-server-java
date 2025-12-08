@@ -60,4 +60,8 @@ public class Seat {
     public void changeToHeld() {
         this.status = Status.HELD;
     }
+
+    public void changeToAvailable() {
+        this.status = Status.AVAILABLE;
+    }
 }
