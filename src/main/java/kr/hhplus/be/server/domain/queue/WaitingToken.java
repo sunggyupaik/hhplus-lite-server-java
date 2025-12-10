@@ -22,12 +22,14 @@ import java.time.LocalDateTime;
 @ToString
 @Table(name="waiting_tokens")
 public class WaitingToken {
+    private static final Long EXPIRED_MINUTE_FROM_CREATED_AT = 5L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "waiting_token_id")
     private Long id;
     private Long userId;
-    private String waitingToken;
+    private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
 
@@ -45,13 +47,23 @@ public class WaitingToken {
     }
 
     @Builder
-    public WaitingToken(Long id, Long userId, String waitingToken, LocalDateTime createdAt,
+    public WaitingToken(Long id, Long userId, String token, LocalDateTime createdAt,
                         LocalDateTime expiredAt, Status status) {
         this.id = id;
         this.userId = userId;
-        this.waitingToken = waitingToken;
+        this.token = token;
         this.createdAt = createdAt;
         this.expiredAt = expiredAt;
         this.status = status;
+    }
+
+    public static WaitingToken createFrom(Long userId, String token, LocalDateTime createdAt) {
+        return WaitingToken.builder()
+                .userId(userId)
+                .token(token)
+                .createdAt(createdAt)
+                .expiredAt(createdAt.plusMinutes(EXPIRED_MINUTE_FROM_CREATED_AT))
+                .status(WaitingToken.Status.WAITING)
+                .build();
     }
 }
