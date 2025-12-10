@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 @ToString
 @Table(name="waiting_tokens")
 public class WaitingToken {
-    private static final Long EXPIRED_MINUTE_FROM_CREATED_AT = 5L;
+    public static final Long EXPIRED_MINUTE_FROM_CREATED_AT = 5L;
+    public static final Long USER_COUNT_TO_ADD_QUEUE = 10L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

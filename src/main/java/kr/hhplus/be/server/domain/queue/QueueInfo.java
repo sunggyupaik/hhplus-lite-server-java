@@ -20,6 +20,20 @@ public class QueueInfo {
         }
     }
 
+    @Builder
+    public record QueueRefreshCountInfo(
+            int updateToExpiredTokenCount,
+            int updateToHeldTokenCount
+    ) {
+
+        public static QueueRefreshCountInfo of(int updateToExpiredTokenCount, int updateToHeldTokenCount) {
+            return QueueRefreshCountInfo.builder()
+                    .updateToExpiredTokenCount(updateToExpiredTokenCount)
+                    .updateToHeldTokenCount(updateToHeldTokenCount)
+                    .build();
+        }
+    }
+
     public interface MainIF {
         Long getWaitingTokenId();
         Long getUserId();

@@ -6,4 +6,6 @@ public interface QueueService {
     String issueToken(String userToken, LocalDateTime createdAt);
 
     QueueInfo.Main getStatus(String token);
+
+    QueueInfo.QueueRefreshCountInfo runQueueRefreshJob();
 }
