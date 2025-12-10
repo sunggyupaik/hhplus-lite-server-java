@@ -24,6 +24,16 @@ public class QueueRepositoryImpl implements QueueRepository {
         return QueueInfo.Main.of(findMainIF);
     }
 
+    @Override
+    public int expireExpiredTokens() {
+        return queueJpaRepository.expireExpiredTokens();
+    }
+
+    @Override
+    public int enqueueNewUsers(Long userCountToAddQueue) {
+        return queueJpaRepository.enqueueNewUsers(userCountToAddQueue);
+    }
+
     private void validChk(WaitingToken waitingToken) {
         if (waitingToken.getUserId() == null) throw new InvalidParamException("waitingToken.userId");
         if (waitingToken.getToken() == null) throw new InvalidParamException("waitingToken.waitingToken");
