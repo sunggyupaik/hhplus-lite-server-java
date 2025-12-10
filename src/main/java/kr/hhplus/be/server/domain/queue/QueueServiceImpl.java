@@ -16,15 +16,14 @@ public class QueueServiceImpl implements QueueService {
     public String issueToken(String userToken, LocalDateTime createdAt) {
         Long userId = UserTokenRepository.findUserId(userToken);
         String token = WaitingTokenGenerator.randomCharacter();
-        WaitingToken waitingToken = WaitingToken.builder()
-                .userId(userId)
-                .waitingToken(token)
-                .createdAt(createdAt)
-                .expiredAt(createdAt.plusHours(1))
-                .status(WaitingToken.Status.WAITING)
-                .build();
+        WaitingToken waitingToken = WaitingToken.createFrom(userId, token, createdAt);
 
         WaitingToken createdWaitingToken = queueRepository.save(waitingToken);
-        return createdWaitingToken.getWaitingToken();
+        return createdWaitingToken.getToken();
+    }
+
+    @Override
+    public QueueInfo.Main getStatus(String token) {
+        return queueRepository.findByToken(token);
     }
 }
