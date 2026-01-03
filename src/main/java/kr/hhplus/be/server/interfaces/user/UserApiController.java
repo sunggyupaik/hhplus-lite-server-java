@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +19,7 @@ public class UserApiController {
     private final UserService userService;
 
     @GetMapping("/{userId}/points")
-    public CommonResponse getPoints(@RequestHeader("X-Waiting-Token") String waitingToken,
-                                    @PathVariable("userId") Long userId) {
+    public CommonResponse getPoints(@PathVariable("userId") Long userId) {
         var pointsInfo = userService.getPoint(userId);
         var response = UserDto.PointMain.of(pointsInfo);
 
@@ -29,8 +27,7 @@ public class UserApiController {
     }
 
     @PostMapping("/{userId}/charge")
-    public CommonResponse chargePoint(@RequestHeader("X-Waiting-Token") String waitingToken,
-                                      @PathVariable("userId") Long userId,
+    public CommonResponse chargePoint(@PathVariable("userId") Long userId,
                                       @RequestBody @Valid UserDto.chargePointRequest request) {
         UserCommand.chargePoint command = this.chargePointOf(userId, request);
         var balance = userService.chargePoint(command);
@@ -40,9 +37,8 @@ public class UserApiController {
     }
 
     @PostMapping("/{userId}/use")
-    public CommonResponse usePoint(@RequestHeader("X-Waiting-Token") String waitingToken,
-                                      @PathVariable("userId") Long userId,
-                                      @RequestBody @Valid UserDto.usePointRequest request) {
+    public CommonResponse usePoint(@PathVariable("userId") Long userId,
+                                   @RequestBody @Valid UserDto.usePointRequest request) {
         UserCommand.usePoint command = this.usePointOf(userId, request);
         var balance = userService.usePoint(command);
         var response = UserDto.useResponse.of(balance);

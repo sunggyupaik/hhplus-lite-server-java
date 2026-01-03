@@ -15,10 +15,6 @@ class TestcontainersConfiguration {
 			.withUsername("root")
 			.withPassword("1234");
 		MYSQL_CONTAINER.start();
-
-		System.setProperty("spring.datasource.url", MYSQL_CONTAINER.getJdbcUrl() + "?characterEncoding=UTF-8&serverTimezone=UTC");
-		System.setProperty("spring.datasource.username", MYSQL_CONTAINER.getUsername());
-		System.setProperty("spring.datasource.password", MYSQL_CONTAINER.getPassword());
 	}
 
 	@PreDestroy
