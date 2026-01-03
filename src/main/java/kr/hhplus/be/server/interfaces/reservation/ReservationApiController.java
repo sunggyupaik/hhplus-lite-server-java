@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +21,7 @@ public class ReservationApiController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public CommonResponse reserveConcert(@RequestHeader("X-Waiting-Token") String waitingToken,
-                                         @RequestBody @Valid ReservationDto.ReserveConcertRequest request) {
+    public CommonResponse reserveConcert(@RequestBody @Valid ReservationDto.ReserveConcertRequest request) {
         var reserveCommand = this.reserveCommandOf(request);
         var createdId = reservationService.reserveConcert(reserveCommand, LocalDateTime.now());
         var response = ReservationDto.ReserveResponse.of(createdId);
@@ -32,8 +30,7 @@ public class ReservationApiController {
     }
 
     @PostMapping("/{reservationId}/payment")
-    public CommonResponse payReservation(@RequestHeader("X-Waiting-Token") String waitingToken,
-                                         @PathVariable("reservationId") Long reservationId,
+    public CommonResponse payReservation(@PathVariable("reservationId") Long reservationId,
                                          @RequestBody @Valid ReservationDto.payReservationRequest request) {
         var paymentCommand = this.payReservationCommandOf(reservationId, request);
         PaymentInfo.Main paymentResult = reservationService.payReservation(paymentCommand, LocalDateTime.now());
